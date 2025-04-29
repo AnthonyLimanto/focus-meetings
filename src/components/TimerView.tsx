@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSessionStore } from "../session/sessionStore";
-import { formatSeconds } from "../utils/timeUtils";
+import { formatSeconds } from "../utils/timerUtils";
 import PieChartTimer from "./PieChartTimer";
 import { Box, Button, Heading } from "@vibe/core";
 import soundFile from '../assets/sounds/s3_spring_rain.mp3';
