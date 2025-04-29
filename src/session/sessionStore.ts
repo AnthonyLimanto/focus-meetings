@@ -1,5 +1,6 @@
-import { create } from "zustand";
+import { create, useStore } from "zustand";
 import { persist } from "zustand/middleware";
+const SESSION_STORAGE = "session-storage";
 
 type SessionState = {
   intervals: number[];
@@ -19,7 +20,6 @@ type SessionState = {
   removeIntervals: () => void;
 };
 
-// 👇 Wrap your logic inside `persist`
 export const useSessionStore = create<SessionState>()(
   persist(
     (set, get) => ({
@@ -122,17 +122,21 @@ export const useSessionStore = create<SessionState>()(
       removeIntervals: () => {
         const { timer } = get();
         if (timer) clearInterval(timer);
+        localStorage.removeItem(SESSION_STORAGE);
+        window.location.reload(); 
         set({
           intervals: [],
           intervalsTitle: [],
           remainingOverAll: 0,
+          remaining: 0,
           isRunning: false,
           timer: null,
+          currentIndex: 0,
         });
       },
     }),
     {
-      name: "session-storage", // key for localStorage
+      name: SESSION_STORAGE, // key for localStorage
       partialize: (state) => ({
         intervals: state.intervals,
         intervalsTitle: state.intervalsTitle,
@@ -140,7 +144,6 @@ export const useSessionStore = create<SessionState>()(
         remaining: state.remaining,
         remainingOverAll: state.remainingOverAll,
         isRunning: state.isRunning,
-        // 🧠 don't persist the timer itself!
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.isRunning) {
