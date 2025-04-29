@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSessionStore } from "../session/sessionStore"; // <-- your store
-import { Button } from "@vibe/core";
+import { Box, Button, Heading } from "@vibe/core";
 
 export default function MeetingSetupForm() {
   const [localSlices, setLocalSlices] = useState([{ title: "", durationMinutes: 5 }]);
@@ -31,10 +31,10 @@ export default function MeetingSetupForm() {
   }
 
   return (
-    <div className="p-4">
-      <h2>Create Meeting Agenda</h2>
+    <Box className="p-4">
+      <Heading type="h2">Create Meeting Agenda</Heading>
       {localSlices.map((slice, idx) => (
-        <div key={idx}>
+        <Box key={idx}>
           <input
             type="text"
             placeholder="Topic"
@@ -54,7 +54,7 @@ export default function MeetingSetupForm() {
               setLocalSlices(updated);
             }}
           />
-        </div>
+        </Box>
       ))}
       <Button onClick={() => setLocalSlices([...localSlices, { title: "", durationMinutes: 5 }])}>
         Add Slice
@@ -66,6 +66,33 @@ export default function MeetingSetupForm() {
         Go to meeting
       </Button>
       
-    </div>
+    </Box>
   );
 }
+
+const Styles = {
+  heading: {
+    backgroundColor: '#E6F7FF', // very light blue, soft and modern
+    padding: '10px',
+    borderRadius: '12px',
+    marginBottom: '20px',
+    width: 'fit-content',
+  },
+  topicBox: {
+    backgroundColor: '#F0F4F8', // clean soft gray-blue
+    borderRadius: '12px',
+    padding: '20px',
+    marginBottom: '20px',
+    width: '80%',
+    maxWidth: '600px',
+    textAlign: 'center' as const,
+  },
+  buttonRow: {
+    display: 'flex',
+    flexDirection: 'row' as const,
+    gap: '10px',
+    marginTop: '20px',
+    flexWrap: 'wrap' as const,
+    justifyContent: 'center',
+  },
+};

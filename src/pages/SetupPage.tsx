@@ -1,10 +1,31 @@
+import { Box, Heading } from "@vibe/core";
 import MeetingSetupForm from "../components/MeetingSetupForm";
 
 export default function SetupPage() {
   return (
-    <div>
-      <h1>Setup Your Meeting</h1>
+    <Box style={Styles.container}>
+      <Heading style={Styles.heading}>Setup Your Meeting</Heading>
       <MeetingSetupForm />
-    </div>
+    </Box>
   );
 }
+
+const Styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column' as const,
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+    padding: 'medium',
+    backgroundColor: '#E6F7FF',
+    gap: '20px',
+  },
+  heading: {
+    backgroundColor: 'azure',
+    borderRadius: '12px',
+    padding: '10px 20px',
+    color: 'black',
+    boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+  }
+};
