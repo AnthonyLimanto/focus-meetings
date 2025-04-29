@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { useSessionStore } from "../session/sessionStore";
 import { Button } from "@vibe/core";
+import { darkenColor, describeArc } from "../utils/timerUtils";
 
 interface PieChartTimerProps {
   radius?: number;
@@ -13,35 +14,14 @@ type Slice = {
   title: string;
 };
 
-const polarToCartesian = (centerX: number, centerY: number, radius: number, angleInDegrees: number) => {
-  const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
-  return {
-    x: centerX + radius * Math.cos(angleInRadians),
-    y: centerY + radius * Math.sin(angleInRadians),
-  };
-};
-
-const describeArc = (x: number, y: number, radius: number, startAngle: number, sweepAngle: number) => {
-  const start = polarToCartesian(x, y, radius, startAngle);
-  const end = polarToCartesian(x, y, radius, startAngle + sweepAngle);
-  const largeArcFlag = sweepAngle > 180 ? 1 : 0;
-
-  return [
-    `M ${x} ${y}`,
-    `L ${start.x} ${start.y}`,
-    `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${end.x} ${end.y}`,
-    "Z",
-  ].join(" ");
-};
-
 const getPieSlices = (intervals: number[], titles: string[]): Slice[] => {
   const totalTime = intervals.reduce((acc, curr) => acc + curr, 0);
   const colors = [
-    "#00C875", // bright green (success vibe)
-    "#FDAB3D", // soft orange (friendly)
-    "#4ECCC6", // turquoise (calming)
-    "#7859CF", // vibrant purple (creative)
-    "#FF7575", // soft red-pink (attention grabbing)
+    "#00C875", // bright green 
+    "#FDAB3D", // soft orange 
+    "#4ECCC6", // turquoise 
+    "#7859CF", // vibrant purple 
+    "#FF7575", // soft red-pink 
   ];
 
   let currentAngle = 0;
@@ -56,26 +36,6 @@ const getPieSlices = (intervals: number[], titles: string[]): Slice[] => {
     currentAngle += sweepAngle;
     return slice;
   });
-};
-
-const darkenColor = (hex: string, percent: number): string => {
-  const num = parseInt(hex.replace("#", ""), 16);
-  const amt = Math.round(2.55 * percent * 100);
-  const R = (num >> 16) - amt;
-  const G = ((num >> 8) & 0x00ff) - amt;
-  const B = (num & 0x0000ff) - amt;
-
-  return (
-    "#" +
-    (
-      0x1000000 +
-      (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
-      (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
-      (B < 255 ? (B < 1 ? 0 : B) : 255)
-    )
-      .toString(16)
-      .slice(1)
-  );
 };
 
 const PieChartTimer: FC<PieChartTimerProps> = ({ radius = 150 }) => {
