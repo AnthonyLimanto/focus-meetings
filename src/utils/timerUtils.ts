@@ -48,22 +48,31 @@ export const describeArc = (
   ].join(" ");
 };
 
+// Darkens a hex color string by a given percentage
+// hex: color in "#RRGGBB" format
+// percent: value from 0 to 1, where 1 darkens the color fully (to black), 0 leaves it unchanged
 export const darkenColor = (hex: string, percent: number): string => {
+  // Remove the '#' and parse the hex string into a base-16 (hex) number
   const num = parseInt(hex.replace("#", ""), 16);
-  const amt = Math.round(2.55 * percent * 100);
-  const R = (num >> 16) - amt;
-  const G = ((num >> 8) & 0x00ff) - amt;
-  const B = (num & 0x0000ff) - amt;
 
+  // Calculate how much to reduce each RGB component (scales 0–255 by percentage)
+  const amt = Math.round(2.55 * percent * 100);
+
+  // Extract red, green, and blue components and subtract amt from each
+  let R = (num >> 16) - amt;              // Red component
+  let G = ((num >> 8) & 0x00ff) - amt;    // Green component
+  let B = (num & 0x0000ff) - amt;         // Blue component
+
+  // Clamp each component between 0 and 255 and recombine into a single hex string
   return (
     "#" +
     (
       0x1000000 +
-      (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
-      (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
-      (B < 255 ? (B < 1 ? 0 : B) : 255)
+      (R < 255 ? (R < 0 ? 0 : R) : 255) * 0x10000 +
+      (G < 255 ? (G < 0 ? 0 : G) : 255) * 0x100 +
+      (B < 255 ? (B < 0 ? 0 : B) : 255)
     )
-      .toString(16)
-      .slice(1)
+      .toString(16)  // Convert to hex string
+      .slice(1)      // Remove the leading '1' from 0x1000000
   );
 };

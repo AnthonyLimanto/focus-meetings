@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSessionStore } from "../session/sessionStore"; // <-- your store
-import { Box, Button, Heading } from "@vibe/core";
+import { Box, Button, Heading, TextField } from "@vibe/core";
 
 export default function MeetingSetupForm() {
   const [localSlices, setLocalSlices] = useState([{ title: "", durationMinutes: 5 }]);
@@ -32,39 +32,47 @@ export default function MeetingSetupForm() {
 
   return (
     <Box className="p-4">
-      <Heading type="h2">Create Meeting Agenda</Heading>
       {localSlices.map((slice, idx) => (
-        <Box key={idx}>
-          <input
-            type="text"
-            placeholder="Topic"
-            value={slice.title}
-            onChange={(e) => {
-              const updated = [...localSlices];
-              updated[idx].title = e.target.value;
-              setLocalSlices(updated);
-            }}
-          />
-          <input
-            type="number"
-            value={slice.durationMinutes}
-            onChange={(e) => {
-              const updated = [...localSlices];
-              updated[idx].durationMinutes = Number(e.target.value);
-              setLocalSlices(updated);
-            }}
-          />
+        <Box key={idx} style={Styles.intervalRow}>
+          <Box style={Styles.inputGroup}>
+            <label>Topic</label>
+            <TextField 
+              type="text"
+              placeholder="e.g., Design Review"
+              value={slice.title}
+              onChange={(e) => {
+                const updated = [...localSlices];
+                updated[idx].title = e.target.value;
+                setLocalSlices(updated);
+              }}
+            />
+          </Box>
+
+          <Box style={Styles.inputGroup}>
+            <label>Minutes</label>
+            <TextField 
+              type="number"
+              value={slice.durationMinutes}
+              onChange={(e) => {
+                const updated = [...localSlices];
+                updated[idx].durationMinutes = Number(e.target.value);
+                setLocalSlices(updated);
+              }}
+            />
+          </Box>
         </Box>
       ))}
-      <Button onClick={() => setLocalSlices([...localSlices, { title: "", durationMinutes: 5 }])}>
-        Add Slice
-      </Button>
-      <Button onClick={handleStartMeeting}>
-        Save
-      </Button>
-      <Button onClick={handleGoToTimer}>
-        Go to meeting
-      </Button>
+      <Box style={Styles.buttonRow}>
+        <Button onClick={() => setLocalSlices([...localSlices, { title: "", durationMinutes: 5 }])}>
+          Add Slice
+        </Button>
+        <Button onClick={handleStartMeeting}>
+          Save
+        </Button>
+        <Button onClick={handleGoToTimer}>
+          Go to meeting
+        </Button>
+      </Box>
       
     </Box>
   );
@@ -87,12 +95,28 @@ const Styles = {
     maxWidth: '600px',
     textAlign: 'center' as const,
   },
-  buttonRow: {
+  intervalRow: {
     display: 'flex',
     flexDirection: 'row' as const,
+    alignItems: 'center',
     gap: '10px',
-    marginTop: '20px',
-    flexWrap: 'wrap' as const,
-    justifyContent: 'center',
+    marginBottom: '15px',
+    width: 'fit-content',
   },
+  inputGroup: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column' as const,
+    gap: '4px',
+  },
+  buttonRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    // justifyContent: 'space-evenly', // <-- Key property
+    gap: '10px',
+    marginBottom: '15px',
+    width: '100%', // Allow it to stretch across parent container
+  },
+
 };
