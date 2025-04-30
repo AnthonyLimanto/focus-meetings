@@ -9,6 +9,7 @@ export default function MeetingSetupForm() {
   const handleStartMeeting = () => {
     // Validate slices
     const isValid = localSlices.every(slice => slice.title.trim() !== "" && slice.durationMinutes > 0);
+    console.log(localSlices);
     if (!isValid) {
       alert("Please ensure all slices have a title and a duration greater than 0.");
       return;
@@ -32,6 +33,7 @@ export default function MeetingSetupForm() {
 
   return (
     <Box className="p-4">
+      <Heading type="h2">Meeting Agenda</Heading>
       {localSlices.map((slice, idx) => (
         <Box key={idx} style={Styles.intervalRow}>
           <Box style={Styles.inputGroup}>
@@ -42,7 +44,7 @@ export default function MeetingSetupForm() {
               value={slice.title}
               onChange={(e) => {
                 const updated = [...localSlices];
-                updated[idx].title = e.target.value;
+                updated[idx].title = e;
                 setLocalSlices(updated);
               }}
             />
@@ -52,10 +54,10 @@ export default function MeetingSetupForm() {
             <label>Minutes</label>
             <TextField 
               type="number"
-              value={slice.durationMinutes}
+              value={String(slice.durationMinutes)}
               onChange={(e) => {
                 const updated = [...localSlices];
-                updated[idx].durationMinutes = Number(e.target.value);
+                updated[idx].durationMinutes = Number(e);
                 setLocalSlices(updated);
               }}
             />
@@ -113,7 +115,6 @@ const Styles = {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'space-evenly', // <-- Key property
     gap: '10px',
     marginBottom: '15px',
     width: '100%', // Allow it to stretch across parent container

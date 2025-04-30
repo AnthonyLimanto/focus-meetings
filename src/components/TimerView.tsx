@@ -16,9 +16,10 @@ export default function TimerView() {
     intervalsTitle,
     currentIndex,
     removeIntervals,
-    isFinished
+    isFinished,
+    intervalsColour
   } = useSessionStore();
-
+  console.log(intervals, intervalsTitle, intervalsColour);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
 
   useEffect(() => {
