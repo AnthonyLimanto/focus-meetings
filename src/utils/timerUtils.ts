@@ -51,7 +51,7 @@ export const describeArc = (
 // Darkens a hex color string by a given percentage
 // hex: color in "#RRGGBB" format
 // percent: value from 0 to 1, where 1 darkens the color fully (to black), 0 leaves it unchanged
-export const darkenColor = (hex: string, percent: number): string => {
+export const darkenColour = (hex: string, percent: number): string => {
   // Remove the '#' and parse the hex string into a base-16 (hex) number
   const num = parseInt(hex.replace("#", ""), 16);
 

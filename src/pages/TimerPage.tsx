@@ -1,11 +1,13 @@
 import { Heading, Box } from "@vibe/core";
 import TimerView from "../components/TimerView";
+import IntervalList from "../components/IntervalList";
 
 export default function TimerPage() {
   return (
     <Box style={Styles.container}>
         <Heading style={Styles.heading}>Meeting Timer</Heading>
         <TimerView />
+        <IntervalList></IntervalList>
     </Box>
   );
 }
