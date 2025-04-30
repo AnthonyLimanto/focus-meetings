@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { useSessionStore } from "../session/sessionStore";
 import { Button } from "@vibe/core";
-import { darkenColor, describeArc } from "../utils/timerUtils";
+import { darkenColour, describeArc } from "../utils/timerUtils";
 
 interface PieChartTimerProps {
   radius?: number;
@@ -10,19 +10,12 @@ interface PieChartTimerProps {
 type Slice = {
   startAngle: number;
   sweepAngle: number;
-  color: string;
+  colour: string;
   title: string;
 };
-
-const getPieSlices = (intervals: number[], titles: string[]): Slice[] => {
+const getPieSlices = (intervals: number[], titles: string[], colours: string[]): Slice[] => {
   const totalTime = intervals.reduce((acc, curr) => acc + curr, 0);
-  const colors = [
-    "#00C875", // bright green 
-    "#FDAB3D", // soft orange 
-    "#4ECCC6", // turquoise 
-    "#7859CF", // vibrant purple 
-    "#FF7575", // soft red-pink 
-  ];
+
 
   let currentAngle = 0;
   return intervals.map((interval, index) => {
@@ -30,7 +23,7 @@ const getPieSlices = (intervals: number[], titles: string[]): Slice[] => {
     const slice = {
       startAngle: currentAngle,
       sweepAngle,
-      color: colors[index % colors.length],
+      colour: colours[index],
       title: titles[index],
     };
     currentAngle += sweepAngle;
@@ -38,15 +31,17 @@ const getPieSlices = (intervals: number[], titles: string[]): Slice[] => {
   });
 };
 
+
 const PieChartTimer: FC<PieChartTimerProps> = ({ radius = 150 }) => {
-  const { remainingOverAll, remaining, startSession, resumeSession, pauseSession, isRunning, intervals, intervalsTitle, currentIndex } = useSessionStore();
+  const { remainingOverAll, remaining, startSession, resumeSession, pauseSession, isRunning, intervals, intervalsColour, intervalsTitle, currentIndex } = useSessionStore();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const slices = getPieSlices(intervals, intervalsTitle);
+  const slices = getPieSlices(intervals, intervalsTitle, intervalsColour);
   const center = radius;
   const totalTime = intervals.reduce((accumulator, interval) => accumulator + interval, 0);
 
   let timePassed = totalTime - remainingOverAll;
   let currTimeAngle = (timePassed / totalTime) * 360;
+  
 
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding:23 }}>
@@ -62,11 +57,11 @@ const PieChartTimer: FC<PieChartTimerProps> = ({ radius = 150 }) => {
                       cx={center}
                       cy={center}
                       r={radius}
-                      fill={isSelected ? darkenColor(slice.color, 0.2) : slice.color}
+                      fill={isSelected ? darkenColour(slice.colour, 0.2) : slice.colour}
                     />
                     <path
                       d={describeArc(center, center, radius, 0, currTimeAngle)}
-                      fill={darkenColor(slice.color, 0.2)}
+                      fill={darkenColour(slice.colour, 0.2)}
                     />
                   </React.Fragment>
                 );
@@ -75,7 +70,7 @@ const PieChartTimer: FC<PieChartTimerProps> = ({ radius = 150 }) => {
                 <path
                   key={i}
                   d={describeArc(center, center, radius, slice.startAngle, slice.sweepAngle)}
-                  fill={isSelected ? darkenColor(slice.color, 0.2) : slice.color}
+                  fill={isSelected ? darkenColour(slice.colour, 0.2) : slice.colour}
                 />
               );
             })}
@@ -83,14 +78,14 @@ const PieChartTimer: FC<PieChartTimerProps> = ({ radius = 150 }) => {
               <path
                 key={index + 1000}
                 d={describeArc(center, center, radius, slice.startAngle, currTimeAngle - slice.startAngle)}
-                fill={darkenColor(slice.color, 0.2)}
+                fill={darkenColour(slice.colour, 0.2)}
               />
             ))}
             {currTimeAngle === 360 && (
               <path
                 key={10000}
                 d={describeArc(center, center, radius, slices[0].startAngle, slices[0].sweepAngle)}
-                fill={darkenColor(slices[0].color, 0.2)}
+                fill={darkenColour(slices[0].colour, 0.2)}
               />
             )}
             {intervals.length === 1 && (
@@ -99,7 +94,7 @@ const PieChartTimer: FC<PieChartTimerProps> = ({ radius = 150 }) => {
                 cx={center}
                 cy={center}
                 r={radius}
-                fill={darkenColor(slices[0].color, 0.2)}
+                fill={darkenColour(slices[0].colour, 0.2)}
               />
             )}
           </svg>

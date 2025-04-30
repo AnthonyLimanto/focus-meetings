@@ -2,9 +2,18 @@ import { create, useStore } from "zustand";
 import { persist } from "zustand/middleware";
 const SESSION_STORAGE = "session-storage";
 
+const colors = [
+  "#00C875", // bright green 
+  "#FDAB3D", // soft orange 
+  "#4ECCC6", // turquoise 
+  "#7859CF", // vibrant purple 
+  "#FF7575", // soft red-pink 
+];
+
 type SessionState = {
   intervals: number[];
   intervalsTitle: string[];
+  intervalsColour: string[];
   currentIndex: number;
   remaining: number;
   remainingOverAll: number;
@@ -25,6 +34,7 @@ export const useSessionStore = create<SessionState>()(
     (set, get) => ({
       intervals: [],
       intervalsTitle: [],
+      intervalsColour: [],
       currentIndex: 0,
       remaining: 0,
       remainingOverAll: 0,
@@ -41,6 +51,7 @@ export const useSessionStore = create<SessionState>()(
         }
         const firstInterval = intervals[0];
         const total = intervals.reduce((acc, interval) => acc + interval, 0);
+        // this set intervals could be an issue later
         set({
           intervals,
           currentIndex: 0,
@@ -108,25 +119,28 @@ export const useSessionStore = create<SessionState>()(
       },
 
       addInterval: (mins: number, title: string) => {
-        const { intervals, intervalsTitle, remainingOverAll } = get();
+        const { intervals, intervalsTitle, remainingOverAll, intervalsColour } = get();
+        const index = intervals.length;
         set({
           intervals: [...intervals, mins * 60],
           intervalsTitle: [...intervalsTitle, title],
+          intervalsColour: [...intervalsColour, colors[index % colors.length]],
           remainingOverAll: remainingOverAll + mins * 60,
         });
         const updatedState = get();
         console.log("Updated intervals:", updatedState.intervals);
         console.log("Updated intervalsTitle:", updatedState.intervalsTitle);
+        console.log("Updated intervalsColour:", updatedState.intervalsColour);
       },
 
       removeIntervals: () => {
         const { timer } = get();
         if (timer) clearInterval(timer);
         localStorage.removeItem(SESSION_STORAGE);
-        window.location.reload(); 
         set({
           intervals: [],
           intervalsTitle: [],
+          intervalsColour: [],
           remainingOverAll: 0,
           remaining: 0,
           isRunning: false,
@@ -140,6 +154,7 @@ export const useSessionStore = create<SessionState>()(
       partialize: (state) => ({
         intervals: state.intervals,
         intervalsTitle: state.intervalsTitle,
+        intervalsColour: state.intervalsColour,
         currentIndex: state.currentIndex,
         remaining: state.remaining,
         remainingOverAll: state.remainingOverAll,
