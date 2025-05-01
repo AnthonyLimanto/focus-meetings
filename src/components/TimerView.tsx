@@ -17,7 +17,8 @@ export default function TimerView() {
     currentIndex,
     removeIntervals,
     isFinished,
-    intervalsColour
+    intervalsColour,
+    goToNextInterval,
   } = useSessionStore();
   console.log(intervals, intervalsTitle, intervalsColour);
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
@@ -71,6 +72,7 @@ export default function TimerView() {
         )}
 
         <Button onClick={() => { removeIntervals(); }}>Reset</Button>
+        <Button onClick={() => { goToNextInterval(); }}>Go to Next Interval</Button>
         <Button onClick={() => { audio?.pause(); }}>Stop Alarm</Button>
       </Box>
     </Box>
