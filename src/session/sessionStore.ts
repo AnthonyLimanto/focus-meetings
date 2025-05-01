@@ -14,12 +14,15 @@ type SessionState = {
   intervals: number[];
   intervalsTitle: string[];
   intervalsColour: string[];
+  actualTimeTaken: number;
+  actualTimeTakenForSlice: number[];
   currentIndex: number;
   remaining: number;
   remainingOverAll: number;
   isRunning: boolean;
   timer: NodeJS.Timeout | null;
   isFinished: boolean,
+  isExtension: boolean,
   startSession: (intervals: number[]) => void;
   pauseSession: () => void;
   resumeSession: () => void;
@@ -27,6 +30,7 @@ type SessionState = {
   nextInterval: () => void;
   addInterval: (mins: number, title: string) => void;
   removeIntervals: () => void;
+  goToNextInterval: () => void;
 };
 
 export const useSessionStore = create<SessionState>()(
@@ -35,12 +39,15 @@ export const useSessionStore = create<SessionState>()(
       intervals: [],
       intervalsTitle: [],
       intervalsColour: [],
+      actualTimeTaken: 0,
+      actualTimeTakenForSlice: [],
       currentIndex: 0,
       remaining: 0,
       remainingOverAll: 0,
       isRunning: false,
       timer: null,
       isFinished: false,
+      isExtension: true,
 
       startSession: (intervals) => {
         const { isRunning } = get();
@@ -66,26 +73,58 @@ export const useSessionStore = create<SessionState>()(
       },
 
       tick: () => {
-        const { remaining, nextInterval } = get();
+        const { remaining, nextInterval, isExtension } = get();
+      
         if (remaining <= 1) {
-          nextInterval();
+          if (!isExtension) {
+            // Move to the next interval if not in extension mode
+            nextInterval();
+          } else {
+            // Only update actualTimeTaken in extension mode
+            set((state) => ({
+              actualTimeTaken: state.actualTimeTaken + 1,
+            }));
+          }
         } else {
+          // Normal countdown behavior
           set((state) => ({
             remaining: state.remaining - 1,
             remainingOverAll: state.remainingOverAll - 1,
+            actualTimeTaken: state.actualTimeTaken + 1,
           }));
         }
       },
 
+      goToNextInterval: () => {
+        set((state) => ({
+          isExtension: false,
+        }))
+      },
+
       nextInterval: () => {
-        const { intervals, currentIndex, timer } = get();
-
+        const { intervals, currentIndex, timer, actualTimeTaken, actualTimeTakenForSlice } = get();
+      
         if (timer) clearInterval(timer);
-
+      
+        const updatedTimeTakenForSlice = [...actualTimeTakenForSlice];
+        if (currentIndex === 0) {
+          updatedTimeTakenForSlice.push(actualTimeTaken);
+        } else {
+          const previousTime = actualTimeTakenForSlice.reduce((acc, time) => acc + time, 0);
+          updatedTimeTakenForSlice.push(actualTimeTaken - previousTime);
+        }
+      
         const nextIndex = currentIndex + 1;
         if (nextIndex >= intervals.length) {
-          if (timer) clearInterval(timer);
-          set({ isRunning: false, timer: null, remaining: 0, remainingOverAll: 0, isFinished:true });
+          set({
+            isRunning: false,
+            isExtension: true,
+            timer: null,
+            remaining: 0,
+            remainingOverAll: 0,
+            isFinished: true,
+            actualTimeTakenForSlice: updatedTimeTakenForSlice,
+          });
         } else {
           const newTime = intervals[nextIndex];
           const newTimer = setInterval(() => get().tick(), 1000);
@@ -94,6 +133,7 @@ export const useSessionStore = create<SessionState>()(
             currentIndex: nextIndex,
             isRunning: true,
             timer: newTimer,
+            actualTimeTakenForSlice: updatedTimeTakenForSlice,
           });
         }
       },
@@ -155,10 +195,13 @@ export const useSessionStore = create<SessionState>()(
         intervals: state.intervals,
         intervalsTitle: state.intervalsTitle,
         intervalsColour: state.intervalsColour,
+        actualTimeTaken: state.actualTimeTaken,
+        actualTimeTakenForSlice: state.actualTimeTakenForSlice,
         currentIndex: state.currentIndex,
         remaining: state.remaining,
         remainingOverAll: state.remainingOverAll,
         isRunning: state.isRunning,
+        isExtension: state.isExtension,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.isRunning) {
