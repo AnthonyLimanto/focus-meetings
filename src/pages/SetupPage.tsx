@@ -4,7 +4,6 @@ import MeetingSetupForm from "../components/MeetingSetupForm";
 export default function SetupPage() {
   return (
     <Box style={Styles.container}>
-      <Heading style={Styles.heading}>Setup Your Meeting</Heading>
       <MeetingSetupForm />
     </Box>
   );
@@ -22,7 +21,7 @@ const Styles = {
     gap: '20px',
   },
   heading: {
-    backgroundColor: 'azure',
+    backgroundColor: "#E6F7FF", // Light blue
     borderRadius: '12px',
     padding: '10px 20px',
     color: 'black',

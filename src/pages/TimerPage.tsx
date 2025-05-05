@@ -5,33 +5,53 @@ import IntervalList from "../components/IntervalList";
 export default function TimerPage() {
   const handleGoToSummary = () => {
     window.location.href = "/summary";
-  }
+  };
+
   return (
     <Box style={Styles.container}>
-        <Heading style={Styles.heading}>Meeting Timer</Heading>
+      {/* Main Content */}
+      <Box style={Styles.content}>
         <TimerView />
-        <IntervalList></IntervalList>
-        <Button onClick={handleGoToSummary}>Summary</Button>
+        <IntervalList />
+      </Box>
+
+      {/* Summary Button */}
+      <Button style={Styles.summaryButton} onClick={handleGoToSummary}>
+        Summary
+      </Button>
     </Box>
   );
 }
 
 const Styles = {
-    container: {
-      display: 'flex',
-      flexDirection: 'column' as const,
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100vh',
-      padding: 'medium',
-      backgroundColor: '#E6F7FF',
-      gap: '20px',
-    },
-    heading: {
-      backgroundColor: 'azure',
-      borderRadius: '12px',
-      padding: '10px 20px',
-      color: 'black',
-      boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-    }
-  };
+  container: {
+    display: "flex",
+    flexDirection: "column" as const, // Stack content vertically
+    justifyContent: "space-between", // Space between main content and button
+    alignItems: "center",
+    minHeight: "10vh",
+    padding: "20px",
+    backgroundColor: "#E6F7FF", // Light blue background
+  },
+  content: {
+    display: "flex",
+    flexDirection: "row" as const, // Place TimerView and IntervalList side by side
+    justifyContent: "center",
+    alignItems: "flex-start",
+    gap: "20px", // Space between TimerView and IntervalList
+    width: "100%",
+    maxWidth: "1200px", // Limit the width of the content
+  },
+  summaryButton: {
+    backgroundColor: "#004080", // Dark blue
+    color: "#FFFFFF", // White text
+    border: "none",
+    borderRadius: "8px",
+    padding: "10px 20px",
+    fontSize: "16px",
+    cursor: "pointer",
+    transition: "background-color 0.3s ease",
+    textAlign: "center" as const,
+    marginTop: "20px",
+  },
+};

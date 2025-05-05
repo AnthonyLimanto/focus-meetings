@@ -23,6 +23,7 @@ type SessionState = {
   timer: NodeJS.Timeout | null;
   isFinished: boolean,
   isExtension: boolean,
+  isStarted: boolean,
   startSession: (intervals: number[]) => void;
   pauseSession: () => void;
   resumeSession: () => void;
@@ -49,6 +50,7 @@ export const useSessionStore = create<SessionState>()(
       timer: null,
       isFinished: false,
       isExtension: true,
+      isStarted: false,
 
       startSession: (intervals) => {
         const { isRunning } = get();
@@ -66,7 +68,8 @@ export const useSessionStore = create<SessionState>()(
           remaining: firstInterval,
           isRunning: true,
           remainingOverAll: total,
-          isFinished: false
+          isFinished: false,
+          isStarted: true,
         });
 
         const timer = setInterval(() => get().tick(), 1000);
