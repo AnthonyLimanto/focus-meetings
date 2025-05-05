@@ -31,6 +31,7 @@ type SessionState = {
   addInterval: (mins: number, title: string) => void;
   removeIntervals: () => void;
   goToNextInterval: () => void;
+  stayInCurrentInterval: () => void;
 };
 
 export const useSessionStore = create<SessionState>()(
@@ -73,13 +74,14 @@ export const useSessionStore = create<SessionState>()(
       },
 
       tick: () => {
-        const { remaining, nextInterval, isExtension } = get();
-      
-        if (remaining <= 1) {
+        const { remaining, nextInterval, isExtension, actualTimeTaken } = get();
+        console.log("Extension mode:" + isExtension);
+        if (remaining < 1) {
           if (!isExtension) {
             // Move to the next interval if not in extension mode
             nextInterval();
           } else {
+            console.log("Extended, actual time is :" + actualTimeTaken)
             // Only update actualTimeTaken in extension mode
             set((state) => ({
               actualTimeTaken: state.actualTimeTaken + 1,
@@ -98,6 +100,11 @@ export const useSessionStore = create<SessionState>()(
       goToNextInterval: () => {
         set((state) => ({
           isExtension: false,
+        }))
+      },
+      stayInCurrentInterval: () => {
+        set((state) => ({
+          isExtension: true,
         }))
       },
 
@@ -202,6 +209,7 @@ export const useSessionStore = create<SessionState>()(
         remainingOverAll: state.remainingOverAll,
         isRunning: state.isRunning,
         isExtension: state.isExtension,
+        isFinished: state.isFinished,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.isRunning) {
