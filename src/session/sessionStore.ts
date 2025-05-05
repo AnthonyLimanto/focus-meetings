@@ -24,6 +24,7 @@ type SessionState = {
   isFinished: boolean,
   isExtension: boolean,
   isStarted: boolean,
+  isExtended: boolean,
   startSession: (intervals: number[]) => void;
   pauseSession: () => void;
   resumeSession: () => void;
@@ -51,6 +52,7 @@ export const useSessionStore = create<SessionState>()(
       isFinished: false,
       isExtension: true,
       isStarted: false,
+      isExtended: false,
 
       startSession: (intervals) => {
         const { isRunning } = get();
@@ -70,6 +72,7 @@ export const useSessionStore = create<SessionState>()(
           remainingOverAll: total,
           isFinished: false,
           isStarted: true,
+          isExtension: true,
         });
 
         const timer = setInterval(() => get().tick(), 1000);
@@ -88,6 +91,7 @@ export const useSessionStore = create<SessionState>()(
             // Only update actualTimeTaken in extension mode
             set((state) => ({
               actualTimeTaken: state.actualTimeTaken + 1,
+              isExtended: true,
             }));
           }
         } else {
@@ -134,6 +138,7 @@ export const useSessionStore = create<SessionState>()(
             remainingOverAll: 0,
             isFinished: true,
             actualTimeTakenForSlice: updatedTimeTakenForSlice,
+            isExtended: false,
           });
         } else {
           const newTime = intervals[nextIndex];
@@ -144,6 +149,7 @@ export const useSessionStore = create<SessionState>()(
             isRunning: true,
             timer: newTimer,
             actualTimeTakenForSlice: updatedTimeTakenForSlice,
+            isExtended: false,
           });
         }
       },

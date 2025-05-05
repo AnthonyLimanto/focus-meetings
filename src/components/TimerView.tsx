@@ -20,6 +20,7 @@ export default function TimerView() {
     isFinished,
     isExtension,
     isStarted,
+    isExtended,
     goToNextInterval,
     stayInCurrentInterval,
   } = useSessionStore();
@@ -94,12 +95,12 @@ export default function TimerView() {
             Resume
           </Button>
         )}
-        <Button style={TimerViewStyles.button} onClick={() => removeIntervals()} disabled={isRunning}>
+        <Button style={TimerViewStyles.button} onClick={() => removeIntervals()}>
           Reset
         </Button>
 
         {/* Interval Control */}
-        {!isFinished && isExtension && (
+        {!isFinished && isExtended && (
           <>
             <Button style={TimerViewStyles.button} onClick={() => goToNextInterval()}>
               Next Interval
