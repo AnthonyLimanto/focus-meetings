@@ -9,9 +9,9 @@ export default function MeetingSetupForm() {
 
   const handleStartMeeting = () => {
     // Validate slices
-    const isValid = localSlices.every((slice) => slice.title.trim() !== "" && slice.durationMinutes > 0);
+    const isValid = localSlices.every((slice) => slice.title.trim() !== "" && slice.durationMinutes > 0 && slice.durationMinutes < 120);
     if (!isValid) {
-      alert("Please ensure all slices have a title and a duration greater than 0.");
+      alert("Please ensure all slices have a title and a duration between 0 and 120 minutes.");
       return;
     }
 
