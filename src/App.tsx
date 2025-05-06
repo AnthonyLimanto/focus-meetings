@@ -7,8 +7,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<SetupPage />} />
-        <Route path="/timer" element={<TimerPage />} />
+        <Route path="/setup" element={<SetupPage />} />
+        <Route path="/" element={<TimerPage />} />
         <Route path="/summary" element={<SummaryPage />} />
       </Routes>
     </Router>

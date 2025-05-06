@@ -26,6 +26,9 @@ export default function TimerView() {
   } = useSessionStore();
 
   const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const handleAddIntervals = () => {
+    window.location.href = "/setup";
+  }
 
   useEffect(() => {
     const newAudio = new Audio(soundFile);
@@ -50,8 +53,6 @@ export default function TimerView() {
       }
     };
   }, [remaining]);
-
-  if (!intervals.length) return <div style={TimerViewStyles.noSession}>No meeting session found.</div>;
 
   const currentTopic = intervalsTitle[currentIndex] || "Untitled";
 
@@ -80,53 +81,64 @@ export default function TimerView() {
         <PieChartTimer />
       </Box>
 
-      {remaining == 0 && !isFinished &&  (
+      {remaining === 0 && !isFinished && (
         <Box>
-          <Heading>
-            OVERTIME!!!
-          </Heading>
+          <Heading>OVERTIME!!!</Heading>
         </Box>
-    )}
+      )}
 
       {/* Control Buttons */}
       <Box style={TimerViewStyles.buttonRow}>
-        {/* Start Meeting Button */}
-        {!isStarted && (
-          <Box style={TimerViewStyles.startButtonBox}>
-            <Button style={TimerViewStyles.button} onClick={() => startSession(intervals)}>
-              Start Meeting
-            </Button>
-          </Box>
-        )}
-
-        {/* Other Buttons */}
-        <Box style={TimerViewStyles.otherButtonsBox}>
-          {isStarted && isRunning && (
-            <Button style={TimerViewStyles.button} onClick={() => pauseSession()}>
-              Pause
-            </Button>
-          )}
-          {!isRunning && !isFinished && (
-            <Button style={TimerViewStyles.button} onClick={() => resumeSession()}>
-              Resume
-            </Button>
-          )}
-          <Button style={TimerViewStyles.button} onClick={() => removeIntervals()}>
-            Reset
+        {/* Show this button only if intervals.length === 0 */}
+        {intervals.length === 0 ? (
+          <Button
+            style={TimerViewStyles.button}
+            onClick={handleAddIntervals}
+          >
+            Add Intervals
           </Button>
+        ) : (
+          <>
+            {/* Start Meeting Button */}
+            {!isStarted ? (
+              <Box style={TimerViewStyles.startButtonBox}>
+                <Button style={TimerViewStyles.button} onClick={() => startSession(intervals)}>
+                  Start Meeting
+                </Button>
+              </Box>
+            ) : (
+              <Box style={TimerViewStyles.otherButtonsBox}>
+                {isStarted && isRunning && (
+                  <Button style={TimerViewStyles.button} onClick={() => pauseSession()}>
+                    Pause
+                  </Button>
+                )}
+                {!isRunning && !isFinished && (
+                  <Button style={TimerViewStyles.button} onClick={() => resumeSession()}>
+                    Resume
+                  </Button>
+                )}
+                <Button style={TimerViewStyles.button} onClick={() => removeIntervals()}>
+                  Clear
+                </Button>
 
-          {/* Interval Control */}
-          {!isFinished && (
-            <Button style={TimerViewStyles.button} onClick={() => goToNextInterval()}>
-              Next Interval
-            </Button>
-          )}
+                {/* Interval Control */}
+                {!isFinished && (
+                  <Button style={TimerViewStyles.button} onClick={() => goToNextInterval()}>
+                    Next Interval
+                  </Button>
+                )}
 
-          {/* Alarm Control */}
-          {remaining == 0 && <Button style={TimerViewStyles.button} onClick={() => audio?.pause()} disabled={!audio}>
-            Snooze
-          </Button>}
-        </Box>
+                {/* Alarm Control */}
+                {remaining === 0 && (
+                  <Button style={TimerViewStyles.button} onClick={() => audio?.pause()} disabled={!audio}>
+                    Snooze
+                  </Button>
+                )}
+              </Box>
+            )}
+          </>
+        )}
       </Box>
     </Box>
   );
