@@ -45,7 +45,7 @@ export const useSessionStore = create<SessionState>()(
       actualTimeTaken: 0,
       actualTimeTakenForSlice: [],
       currentIndex: 0,
-      remaining: 0,
+      remaining: 999,
       remainingOverAll: 0,
       isRunning: false,
       timer: null,
@@ -151,7 +151,8 @@ export const useSessionStore = create<SessionState>()(
             isRunning: true,
             timer: newTimer,
             actualTimeTakenForSlice: updatedTimeTakenForSlice,
-            isExtended: false,
+            isExtended: true,
+            isExtension: true,
             remainingOverAll: newRemainingOverAll,
           });
         }
@@ -200,13 +201,17 @@ export const useSessionStore = create<SessionState>()(
           intervals: [],
           intervalsTitle: [],
           intervalsColour: [],
+          actualTimeTaken: 0,
+          actualTimeTakenForSlice: [],
+          currentIndex: 0,
+          remaining: 999,
           remainingOverAll: 0,
-          remaining: 0,
           isRunning: false,
           timer: null,
-          currentIndex: 0,
-          isStarted: false,
           isFinished: false,
+          isExtension: true,
+          isStarted: false,
+          isExtended: false,
         });
       },
     }),
@@ -225,6 +230,7 @@ export const useSessionStore = create<SessionState>()(
         isExtension: state.isExtension,
         isFinished: state.isFinished,
         isStarted: state.isStarted,
+        isExtended: state.isExtended,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.isRunning) {

@@ -32,7 +32,7 @@ export default function TimerView() {
     newAudio.volume = 0.1;
 
     // Play sound when the current interval finishes
-    if (remaining === 0 && currentIndex !== 0) {
+    if (remaining === 0) {
       try {
         newAudio.play();
         setAudio(newAudio);
@@ -49,7 +49,7 @@ export default function TimerView() {
         console.error("Error stopping sound:", error);
       }
     };
-  }, [remaining, currentIndex]);
+  }, [remaining]);
 
   if (!intervals.length) return <div style={TimerViewStyles.noSession}>No meeting session found.</div>;
 
@@ -67,17 +67,26 @@ export default function TimerView() {
             Timer Done
           </Heading>
         ) : (
-          <Heading type="h3" align="center" style={TimerViewStyles.timeLeft}>
-            Time Left: {formatSeconds(remaining)}
-          </Heading>
+          remaining !== 999 && ( // Only show "Time Left" if remaining is not 999
+            <Heading type="h3" align="center" style={TimerViewStyles.timeLeft}>
+              Time Left: {formatSeconds(remaining)}
+            </Heading>
+          )
         )}
-        
       </Box>
 
       {/* Pie Chart Timer */}
       <Box style={TimerViewStyles.timerBox}>
         <PieChartTimer />
       </Box>
+
+      {remaining == 0 && !isFinished &&  (
+        <Box>
+          <Heading>
+            OVERTIME!!!
+          </Heading>
+        </Box>
+    )}
 
       {/* Control Buttons */}
       <Box style={TimerViewStyles.buttonRow}>
@@ -114,9 +123,9 @@ export default function TimerView() {
           )}
 
           {/* Alarm Control */}
-          <Button style={TimerViewStyles.button} onClick={() => audio?.pause()} disabled={!audio}>
-            Stop Alarm
-          </Button>
+          {remaining == 0 && <Button style={TimerViewStyles.button} onClick={() => audio?.pause()} disabled={!audio}>
+            Snooze
+          </Button>}
         </Box>
       </Box>
     </Box>
