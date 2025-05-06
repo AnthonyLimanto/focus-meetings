@@ -32,7 +32,7 @@ const getPieSlices = (intervals: number[], titles: string[], colours: string[]):
 };
 
 
-const PieChartTimer: FC<PieChartTimerProps> = ({ radius = 150 }) => {
+const PieChartTimer: FC<PieChartTimerProps> = ({ radius = 300 }) => {
   const { remainingOverAll, remaining, startSession, resumeSession, pauseSession, isRunning, intervals, intervalsColour, intervalsTitle, currentIndex } = useSessionStore();
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const slices = getPieSlices(intervals, intervalsTitle, intervalsColour);

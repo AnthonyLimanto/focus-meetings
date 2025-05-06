@@ -32,7 +32,7 @@ export default function TimerView() {
     newAudio.volume = 0.1;
 
     // Play sound when the current interval finishes
-    if (remaining === 0) {
+    if (remaining === 0 && currentIndex !== 0) {
       try {
         newAudio.play();
         setAudio(newAudio);
@@ -49,7 +49,7 @@ export default function TimerView() {
         console.error("Error stopping sound:", error);
       }
     };
-  }, [remaining]);
+  }, [remaining, currentIndex]);
 
   if (!intervals.length) return <div style={TimerViewStyles.noSession}>No meeting session found.</div>;
 
@@ -62,14 +62,16 @@ export default function TimerView() {
         <Heading type="h2" align="center" style={TimerViewStyles.topicHeading}>
           Current Topic: {currentTopic}
         </Heading>
-        {isFinished && (
+        {isFinished ? (
           <Heading type="h3" align="center" style={TimerViewStyles.finishedHeading}>
             Timer Done
           </Heading>
+        ) : (
+          <Heading type="h3" align="center" style={TimerViewStyles.timeLeft}>
+            Time Left: {formatSeconds(remaining)}
+          </Heading>
         )}
-        <Heading type="h3" align="center" style={TimerViewStyles.timeLeft}>
-          Time Left: {formatSeconds(remaining)}
-        </Heading>
+        
       </Box>
 
       {/* Pie Chart Timer */}
@@ -79,39 +81,43 @@ export default function TimerView() {
 
       {/* Control Buttons */}
       <Box style={TimerViewStyles.buttonRow}>
-        {/* Session Control */}
+        {/* Start Meeting Button */}
         {!isStarted && (
-          <Button style={TimerViewStyles.button} onClick={() => startSession(intervals)}>
-            Start Meeting
-          </Button>
+          <Box style={TimerViewStyles.startButtonBox}>
+            <Button style={TimerViewStyles.button} onClick={() => startSession(intervals)}>
+              Start Meeting
+            </Button>
+          </Box>
         )}
-        {isRunning && (
-          <Button style={TimerViewStyles.button} onClick={() => pauseSession()}>
-            Pause
-          </Button>
-        )}
-        {!isRunning && !isFinished && (
-          <Button style={TimerViewStyles.button} onClick={() => resumeSession()}>
-            Resume
-          </Button>
-        )}
-        <Button style={TimerViewStyles.button} onClick={() => removeIntervals()}>
-          Reset
-        </Button>
 
-        {/* Interval Control */}
-        {!isFinished && isExtended && (
-          <>
+        {/* Other Buttons */}
+        <Box style={TimerViewStyles.otherButtonsBox}>
+          {isStarted && isRunning && (
+            <Button style={TimerViewStyles.button} onClick={() => pauseSession()}>
+              Pause
+            </Button>
+          )}
+          {!isRunning && !isFinished && (
+            <Button style={TimerViewStyles.button} onClick={() => resumeSession()}>
+              Resume
+            </Button>
+          )}
+          <Button style={TimerViewStyles.button} onClick={() => removeIntervals()}>
+            Reset
+          </Button>
+
+          {/* Interval Control */}
+          {!isFinished && (
             <Button style={TimerViewStyles.button} onClick={() => goToNextInterval()}>
               Next Interval
             </Button>
-          </>
-        )}
+          )}
 
-        {/* Alarm Control */}
-        <Button style={TimerViewStyles.button} onClick={() => audio?.pause()} disabled={!audio}>
-          Stop Alarm
-        </Button>
+          {/* Alarm Control */}
+          <Button style={TimerViewStyles.button} onClick={() => audio?.pause()} disabled={!audio}>
+            Stop Alarm
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

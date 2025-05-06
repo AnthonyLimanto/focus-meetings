@@ -1,12 +1,13 @@
 import { Heading, Box, Button } from "@vibe/core";
 import TimerView from "../components/TimerView";
 import IntervalList from "../components/IntervalList";
+import { useSessionStore } from "../session/sessionStore";
 
 export default function TimerPage() {
   const handleGoToSummary = () => {
     window.location.href = "/summary";
   };
-
+  const {isFinished} = useSessionStore();
   return (
     <Box style={Styles.container}>
       {/* Main Content */}
@@ -16,9 +17,10 @@ export default function TimerPage() {
       </Box>
 
       {/* Summary Button */}
-      <Button style={Styles.summaryButton} onClick={handleGoToSummary}>
-        Summary
-      </Button>
+      {isFinished &&  
+        (<Button style={Styles.summaryButton} onClick={handleGoToSummary}>
+          Summary
+        </Button>)}
     </Box>
   );
 }
