@@ -22,7 +22,7 @@ export default function MeetingSetupForm() {
     });
     setLocalSlices([]);
 
-    window.location.href = "/timer";
+    window.location.href = "/";
   };
 
   return (
