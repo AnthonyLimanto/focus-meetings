@@ -105,9 +105,11 @@ export const useSessionStore = create<SessionState>()(
       },
 
       goToNextInterval: () => {
+        const { nextInterval } = get();
         set((state) => ({
           isExtension: false,
-        }))
+        }));
+        nextInterval();
       },
       stayInCurrentInterval: () => {
         set((state) => ({
@@ -116,7 +118,7 @@ export const useSessionStore = create<SessionState>()(
       },
 
       nextInterval: () => {
-        const { intervals, currentIndex, timer, actualTimeTaken, actualTimeTakenForSlice } = get();
+        const { intervals, currentIndex, timer, actualTimeTaken, actualTimeTakenForSlice, remainingOverAll, remaining } = get();
       
         if (timer) clearInterval(timer);
       
@@ -127,7 +129,7 @@ export const useSessionStore = create<SessionState>()(
           const previousTime = actualTimeTakenForSlice.reduce((acc, time) => acc + time, 0);
           updatedTimeTakenForSlice.push(actualTimeTaken - previousTime);
         }
-      
+        const newRemainingOverAll = remainingOverAll - remaining;
         const nextIndex = currentIndex + 1;
         if (nextIndex >= intervals.length) {
           set({
@@ -150,6 +152,7 @@ export const useSessionStore = create<SessionState>()(
             timer: newTimer,
             actualTimeTakenForSlice: updatedTimeTakenForSlice,
             isExtended: false,
+            remainingOverAll: newRemainingOverAll,
           });
         }
       },
@@ -202,6 +205,8 @@ export const useSessionStore = create<SessionState>()(
           isRunning: false,
           timer: null,
           currentIndex: 0,
+          isStarted: false,
+          isFinished: false,
         });
       },
     }),
@@ -219,6 +224,7 @@ export const useSessionStore = create<SessionState>()(
         isRunning: state.isRunning,
         isExtension: state.isExtension,
         isFinished: state.isFinished,
+        isStarted: state.isStarted,
       }),
       onRehydrateStorage: () => (state) => {
         if (state?.isRunning) {
