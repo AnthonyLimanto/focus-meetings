@@ -78,9 +78,13 @@ const TimerViewStyles = {
     padding: "10px 20px",
     fontSize: "16px",
     cursor: "pointer",
-    transition: "background-color 0.3s ease",
     textAlign: "center" as const,
   },
+  overtime: {
+    color: "#FF4D4F", // Red for finished
+    marginBottom: "10px",
+    fontSize: "20px",
+  }
 };
 
 export default TimerViewStyles;
