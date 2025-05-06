@@ -30,31 +30,55 @@ export default function TimerPage() {
           What is FocusMeetings?
         </Heading>
         <Text style={Styles.infoText}>
-          FocusMeetings is a timer that helps you stay focused during your meetings by breaking them into manageable intervals. 
-          Each interval is designed to keep discussions on track and ensure that every topic gets the attention it deserves.
+          <strong>FocusMeetings</strong> is a timer-based productivity tool that helps you stay on track during meetings by breaking them into clear, manageable intervals. Each interval is designed with a purpose — to keep discussions focused, ensure all topics are covered, and make the most of your scheduled time.
         </Text>
 
         <Heading type="h3" style={Styles.infoHeading}>
           How to Use the Timer
         </Heading>
         <Text style={Styles.infoText}>
-          To get started, clear the placeholder timer by clicking "Clear". In the "Set Up" page you can add intervals with a title and the duration of the interval.
-          Then click "Start Meeting" to start the timer. 
+          1. <strong>Clear the Placeholder:</strong> Start fresh by clicking "Clear" to remove any default intervals.{" "}
+          <br />
+          2. <strong>Set Up Intervals:</strong> Navigate to the "Set Up" page and add each meeting topic as an interval. Assign a title and a time duration for each one.{" "}
+          <br />
+          3. <strong>Start Your Meeting:</strong> Click "Start Meeting" to launch the timer.{" "}
+          <br />
+          4. <strong>Progress Through Intervals:</strong> Click "Next Interval" anytime to skip ahead.{" "}
+          <br />
+          5. <strong>View the Summary:</strong> Once all intervals are complete, go to the "Summary" page to review the meeting’s structure and outcomes.
         </Text>
-        <Text style={Styles.infoText}>
-          While the timer is ticking down, you can click "Next Interval" to skip to the next interval.
-          After the timer has finished going through every interval, click "Summary" to go to the summary page and see the details of your meeting.
-        </Text>
+
         <Heading type="h3" style={Styles.infoHeading}>
           Benefits of using the timer:
         </Heading>
         <ul style={Styles.infoList}>
-          <li>Improves time management during meetings.</li>
-          <li>Keeps discussions focused and productive.</li>
-          <li>Ensures all topics are covered within the allocated time.</li>
-          <li>Helps avoid overruns and keeps meetings on schedule.</li>
+          <li>⏱️ Improves time management during meetings.</li>
+          <li>🎯 Keeps discussions focused and productive.</li>
+          <li>✅ Ensures all topics are covered within the allocated time.</li>
+          <li>🧠 Reduces cognitive overload by breaking content into chunks.</li>
+          <li>📈 Lets you review and improve future meetings using summaries.</li>
         </ul>
+
+        <Heading type="h3" style={Styles.infoHeading}>
+          Use FocusMeetings for Studying Too!
+        </Heading>
+        <Text style={Styles.infoText}>
+          FocusMeetings isn’t just for meetings — it's also perfect for studying using a method called <strong>micro time-blocking</strong>. Break down your study session into intervals like “Read notes,” “Practice problems,” or “Review flashcards.”
+          <br /><br />
+          <strong>Here’s how it helps students:</strong>
+          <br />
+          • 📚 Keeps study sessions structured and goal-oriented.{" "}
+          <br />
+          • 🔄 Avoids burnout with short, built-in breaks.{" "}
+          <br />
+          • 🎯 Improves focus and task completion by eliminating multitasking.{" "}
+          <br />
+          • 🧩 Builds momentum with small wins each interval.{" "}
+          <br />
+          • 📋 Lets you reflect on your session and adapt for next time.
+        </Text>
       </Box>
+
     </Box>
   );
 }
