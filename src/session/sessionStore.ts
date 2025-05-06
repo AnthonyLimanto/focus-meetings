@@ -39,14 +39,14 @@ type SessionState = {
 export const useSessionStore = create<SessionState>()(
   persist(
     (set, get) => ({
-      intervals: [],
-      intervalsTitle: [],
-      intervalsColour: [],
+      intervals: [300, 600, 900, 1200], // Example intervals in seconds (5 min, 10 min, 15 min)
+      intervalsTitle: ["Introduction", "Discussion", "Q&A", "Conclusion"], // Example titles
+      intervalsColour: ["#00C875", "#FDAB3D", "#4ECCC6", "#7859CF"], // Example colors
       actualTimeTaken: 0,
       actualTimeTakenForSlice: [],
       currentIndex: 0,
-      remaining: 999,
-      remainingOverAll: 0,
+      remaining: 300, // Start with the first interval's time
+      remainingOverAll: 3000, // Total time for all intervals (5 + 10 + 15 + 20 minutes)
       isRunning: false,
       timer: null,
       isFinished: false,
@@ -63,7 +63,6 @@ export const useSessionStore = create<SessionState>()(
         }
         const firstInterval = intervals[0];
         const total = intervals.reduce((acc, interval) => acc + interval, 0);
-        // this set intervals could be an issue later
         set({
           intervals,
           currentIndex: 0,
@@ -84,18 +83,15 @@ export const useSessionStore = create<SessionState>()(
         console.log("Extension mode:" + isExtension);
         if (remaining < 1) {
           if (!isExtension) {
-            // Move to the next interval if not in extension mode
             nextInterval();
           } else {
-            console.log("Extended, actual time is :" + actualTimeTaken)
-            // Only update actualTimeTaken in extension mode
+            console.log("Extended, actual time is :" + actualTimeTaken);
             set((state) => ({
               actualTimeTaken: state.actualTimeTaken + 1,
               isExtended: true,
             }));
           }
         } else {
-          // Normal countdown behavior
           set((state) => ({
             remaining: state.remaining - 1,
             remainingOverAll: state.remainingOverAll - 1,
@@ -111,17 +107,18 @@ export const useSessionStore = create<SessionState>()(
         }));
         nextInterval();
       },
+
       stayInCurrentInterval: () => {
         set((state) => ({
           isExtension: true,
-        }))
+        }));
       },
 
       nextInterval: () => {
         const { intervals, currentIndex, timer, actualTimeTaken, actualTimeTakenForSlice, remainingOverAll, remaining } = get();
-      
+
         if (timer) clearInterval(timer);
-      
+
         const updatedTimeTakenForSlice = [...actualTimeTakenForSlice];
         if (currentIndex === 0) {
           updatedTimeTakenForSlice.push(actualTimeTaken);
