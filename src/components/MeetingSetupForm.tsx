@@ -26,7 +26,7 @@ export default function MeetingSetupForm() {
   };
 
   return (
-    <Box style={TimerViewStyles.container}>
+    <Box style={Styles.container}>
       <Heading type="h2" style={Styles.heading}>
         Meeting Agenda
       </Heading>
@@ -92,6 +92,7 @@ const Styles = {
     padding: "20px",
     backgroundColor: "#CCE7F6", // Slightly darker blue
     minHeight: "20vh",
+    width: "30%"
   },
   heading: {
     backgroundColor: "#E6F7FF", // Very light blue

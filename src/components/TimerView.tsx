@@ -105,6 +105,9 @@ export default function TimerView() {
                 <Button style={TimerViewStyles.button} onClick={() => startSession(intervals)}>
                   Start Meeting
                 </Button>
+                <Button style={TimerViewStyles.button} onClick={() => removeIntervals()}>
+                  Clear
+                </Button>
               </Box>
             ) : (
               <Box style={TimerViewStyles.otherButtonsBox}>

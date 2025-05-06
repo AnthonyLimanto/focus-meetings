@@ -59,9 +59,11 @@ const TimerViewStyles = {
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   },
   startButtonBox: {
-    width: "100%",
-    textAlign: "center" as const,
-    marginBottom: "10px",
+    display: "flex",
+    flexDirection: "row" as const,
+    gap: "10px",
+    flexWrap: "wrap" as const,
+    justifyContent: "center",
   },
   otherButtonsBox: {
     display: "flex",

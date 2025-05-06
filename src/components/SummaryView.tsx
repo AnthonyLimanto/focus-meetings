@@ -13,9 +13,6 @@ export default function SummaryView() {
   if (!isFinished) {
     return (
       <Box style={Styles.container}>
-        <Heading type="h2" align="center" style={Styles.heading}>
-          Meeting Summary
-        </Heading>
         <Text style={Styles.message}>The meeting hasn't finished yet.</Text>
       </Box>
     );
@@ -23,9 +20,6 @@ export default function SummaryView() {
 
   return (
     <Box style={Styles.container}>
-      <Heading type="h2" align="center" style={Styles.heading}>
-        Meeting Summary
-      </Heading>
       {intervals.map((planned, i) => {
         const title = intervalsTitle[i] || `Slice ${i + 1}`;
         const actual = actualTimeTakenForSlice[i] || 0;
